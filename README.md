@@ -1,4 +1,4 @@
-# DNS Updater
+# `dyns` DNS Updater
 
 This small application can be used to update the value of a DNS record in
 **DigitalOcean** with the public IP.
@@ -15,4 +15,19 @@ This could be done by using directly the repository URL:
 pipx install git+https://github.com/marcosgabarda/dyns-cli
 ```
 
-This will add `dyns` command to your shell.
+This will add `dyns` command to your shell:
+
+```bash
+$ dyns -h
+
+usage: dyns [-h] [-v] record
+
+A simple command to update a DNS record in DigitalOcean with your public IP.
+
+positional arguments:
+  record         domain name (ex. 'home.example.com') to update with your public IP
+
+options:
+  -h, --help     show this help message and exit
+  -v, --version  show version
+```
