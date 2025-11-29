@@ -1,0 +1,43 @@
+[project]
+name = "dyns-cli"
+dynamic = ["version"]
+description = "A simple command to update a DNS record in DigitalOcean."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "pydantic-settings>=2.12.0",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18.2",
+    "ruff>=0.14.6",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "dyns.__version__" }
+
+[project.scripts]
+dyns = "dyns.cli:main"
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["D", "E", "W", "F", "I", "UP"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.mypy]
+plugins = ['pydantic.mypy']
