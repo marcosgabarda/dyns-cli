@@ -29,16 +29,20 @@ def public_ip() -> str:
     return response.json()["ip"]
 
 
-def updater(name: str, domain: str) -> None:
-    """Update the DNS record using the DigitalOcean API."""
+def digital_ocean_client() -> httpx.Client:
+    """Create a httpx client with parameters for DigitalOcean."""
     settings = Settings()
     token = settings.digital_ocean_token.get_secret_value()
 
     base_url = "https://api.digitalocean.com/v2"
     headers = {"Authorization": f"Bearer {token}"}
 
-    # creates a client
-    with httpx.Client(base_url=base_url, headers=headers) as do_client:
+    return httpx.Client(base_url=base_url, headers=headers)
+
+
+def retrieve_record(name: str, domain: str) -> dict[str, str | int | None] | None:
+    """Retrieve the record for the domain and name."""
+    with digital_ocean_client() as do_client:
         # looks for the record ID using the list endpoint
         # ------------------------------------------------------------------------------
         response = do_client.get(f"/domains/{domain}/records")
@@ -63,9 +67,18 @@ def updater(name: str, domain: str) -> None:
             return None
         record = records[0]
 
-        # updates the record
-        # ------------------------------------------------------------------------------
+    return record
 
+
+def updater(name: str, domain: str) -> None:
+    """Update the DNS record using the DigitalOcean API."""
+    record = retrieve_record(name=name, domain=domain)
+    if not record:
+        msg = f"Record {name}.{domain} not found"
+        logger.error(msg)
+        raise ValueError(msg)
+
+    with digital_ocean_client() as do_client:
         ip = public_ip()
         payload = {"type": "A", "data": ip}
         response = do_client.patch(
