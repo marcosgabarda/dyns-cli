@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2025-12-03
+
+### Added
+
+- New `--check` option to verify content of the DNS record.
+- Logging verbosity option.
+
+### Changed
+
+- Renamed `updater.py` to `api.py` and refactor of the API requests.
+
+### Fixed
+
+- No required record when checking version.
+
 ## [0.1.0] - 2025-11-29
 
 ### Added
